@@ -4,6 +4,12 @@ inputs:
   GITHUB_TOKEN:
     description: "GitHub token to interact with the repository."
     required: true
+  OLLAMA_SERVER_URL:
+    description: "Ollama server URL."
+    required: true
+  GITHUB_EVENT_PATH:
+    description: "Path to the GitHub event JSON file."
+    required: true
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
     required: false
