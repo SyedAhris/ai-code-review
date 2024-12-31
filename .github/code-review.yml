@@ -3,24 +3,15 @@ name: Code Review with Ollama
 on:
   pull_request:
     types: [opened, synchronize]
-
+permissions: write-all
 jobs:
-  review:
+  code_review:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Code Review
+        uses: freeedcom/ai-codereviewer@main
         with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run code review script
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OLLAMA_SERVER_URL: ${{ secrets.OLLAMA_SERVER_URL }}
-        run: node .github/scripts/code-review.js
+          exclude: "yarn.lock,dist/**"
