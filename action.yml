@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "node16"
   pre: |
-  npm install
+    npm install
   main: "index.js"
 branding:
   icon: "aperture"
