@@ -1,5 +1,5 @@
-const { Octokit } = require("@octokit/rest");
-const axios = require("axios");
+import { Octokit } from "@octokit/rest";
+import axios from "axios";
 
 (async () => {
   const { GITHUB_TOKEN, GITHUB_EVENT_PATH, OLLAMA_SERVER_URL } = process.env;
