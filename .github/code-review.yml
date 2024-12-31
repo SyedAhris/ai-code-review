@@ -13,5 +13,5 @@ jobs:
       - name: Code Review
         uses: freeedcom/ai-codereviewer@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
           exclude: "yarn.lock,dist/**"
