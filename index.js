@@ -4,13 +4,13 @@ const axios = require("axios");
 (async () => {
   const { GITHUB_PAT, GITHUB_EVENT_PATH, OLLAMA_SERVER_URL } = process.env;
 
-  if (!GITHUB_PAT || !GITHUB_EVENT_PATH || !OLLAMA_SERVER_URL) {
+  if (!GITHUB_TOKEN || !GITHUB_EVENT_PATH || !OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
     process.exit(1);
   }
 
   const event = require(GITHUB_EVENT_PATH);
-  const octokit = new Octokit({ auth: GITHUB_PAT });
+  const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
   const owner = event.repository.owner.login;
   const repo = event.repository.name;

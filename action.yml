@@ -1,7 +1,7 @@
 name: "AI Code Review Action"
 description: "Perform code reviews and comment on diffs using Ollama API."
 inputs:
-  GITHUB_PAT:
+  GITHUB_TOKEN:
     description: "GitHub token to interact with the repository."
     required: true
   exclude:
