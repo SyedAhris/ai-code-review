@@ -6,9 +6,9 @@ import axios from "axios";
 
   if (!GITHUB_TOKEN || !GITHUB_EVENT_PATH || !OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
-    console.log(GITHUB_TOKEN)
-    console.log(GITHUB_EVENT_PATH)
-    console.log(OLLAMA_SERVER_URL)
+    console.log("GITHUB_TOKEN:", GITHUB_TOKEN);
+    console.log("GITHUB_EVENT_PATH:", GITHUB_EVENT_PATH);
+    console.log("OLLAMA_SERVER_URL:", OLLAMA_SERVER_URL);
     process.exit(1);
   }
 
