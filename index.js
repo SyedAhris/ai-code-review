@@ -32,8 +32,7 @@ import parseDiff from "parse-diff";
   const response = await octokit.pulls.get({
     owner,
     repo,
-    pullNumber,
-    mediaType: { format: "application/vnd.github.diff" },
+    pullNumber
   });
 
   console.log("Pull Request Raw Response Start ----------------------------------------------------------------------------");
@@ -41,6 +40,20 @@ import parseDiff from "parse-diff";
   console.log(response);
 
   console.log("Pull Request Raw Response End ----------------------------------------------------------------------------");
+
+  const pullRequest = response.data;
+  const base = pullRequest.base.sha;
+  const head = pullRequest.head.sha;
+
+  // Compare commits between base and head
+  const { data: diff } = await octokit.repos.compareCommits({
+    owner,
+    repo,
+    base,
+    head,
+  });
+
+  console.log("Diff details:", diff);
   
   
   const parsedDiff = parseDiff(response.data);
