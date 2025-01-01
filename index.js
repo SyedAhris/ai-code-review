@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/rest";
 import axios from "axios";
 
 (async () => {
-  const { GITHUB_TOKEN, GITHUB_EVENT_PATH, OLLAMA_SERVER_URL } = process.env;
+  const { INPUT_GITHUB_TOKEN, INPUT_GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
   console.log(process.env)
 
   if (!GITHUB_TOKEN || !GITHUB_EVENT_PATH || !OLLAMA_SERVER_URL) {
