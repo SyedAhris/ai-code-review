@@ -3,13 +3,12 @@ import axios from "axios";
 
 (async () => {
   const { INPUT_GITHUB_TOKEN, INPUT_GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
-  console.log(process.env)
 
   if (!INPUT_GITHUB_TOKEN || !INPUT_GITHUB_EVENT_PATH || !INPUT_OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
     console.log("GITHUB_TOKEN:", INPUT_GITHUB_TOKEN);
-    console.log("GITHUB_EVENT_PATH:", GITHUB_EVENT_PATH);
-    console.log("OLLAMA_SERVER_URL:", OLLAMA_SERVER_URL);
+    console.log("GITHUB_EVENT_PATH:", INPUT_GITHUB_EVENT_PATH);
+    console.log("OLLAMA_SERVER_URL:", INPUT_OLLAMA_SERVER_URL);
     process.exit(1);
   }
 
