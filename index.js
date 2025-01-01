@@ -1,5 +1,7 @@
+import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { readFileSync } from "fs";
+
 (async () => {
   const { INPUT_GITHUB_TOKEN, GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
 
@@ -14,13 +16,13 @@ import { readFileSync } from "fs";
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
   );
-  const owner = repository.owner.login;
+  const owner = repository.owner.login,
   const repo = repository.name;
   const pullNumber = number;
 
   try {
     // Get the pull request changes
-    const { data: files } = await octokit.pulls.listFiles({
+    const { data: files } = await Octokit.pulls.listFiles({
       owner,
       repo,
       pull_number: pullNumber,
