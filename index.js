@@ -7,9 +7,9 @@ import { readFileSync } from "fs";
 
   if (!INPUT_GITHUB_TOKEN || !GITHUB_EVENT_PATH || !INPUT_OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
-    console.log("GITHUB_TOKEN:", INPUT_GITHUB_TOKEN);
-    console.log("GITHUB_EVENT_PATH:", GITHUB_EVENT_PATH);
-    console.log("OLLAMA_SERVER_URL:", INPUT_OLLAMA_SERVER_URL);
+    // console.log("GITHUB_TOKEN:", INPUT_GITHUB_TOKEN);
+    // console.log("GITHUB_EVENT_PATH:", GITHUB_EVENT_PATH);
+    // console.log("OLLAMA_SERVER_URL:", INPUT_OLLAMA_SERVER_URL);
     process.exit(1);
   }
 
@@ -23,13 +23,13 @@ import { readFileSync } from "fs";
   const pullNumber = number;
 
 
-  console.log("Owner:", owner);
-  console.log("Repo:", repo);
-  console.log("Pull request number:", pullNumber);
+  // console.log("Owner:", owner);
+  // console.log("Repo:", repo);
+  // console.log("Pull request number:", pullNumber);
 
   const diff = await getDiffString(owner, repo, pullNumber, octokit);
 
-  console.log("Diff:------------------>", diff);
+  // console.log("Diff:------------------>", diff);
 
 
   // const response = await octokit.pulls.get({
@@ -98,16 +98,14 @@ Provide constructive feedback and highlight any issues, potential improvements, 
 
     const comments = apiResponse.data;
 
-    console.log("Review response:", apiResponse.data);
+    // console.log("Review response:", apiResponse.data);
 
-
-    // await octokit.pulls.createReview({
-    //   owner,
-    //   repo,
-    //   pullNumber,
-    //   comments,
-    //   event: "COMMENT",
-    // });
+    await octokit.issues.createComment({
+      owner,
+      repo,
+      issue_number: pullNumber, // Use `issue_number` for pull request comments
+      comments,
+    });
   } catch (error) {
     console.error("Error during code review process:", error);
     process.exit(1);
