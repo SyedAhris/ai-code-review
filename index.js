@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/rest";
 import axios from "axios";
 
 (async () => {
-  const { INPUT_GITHUB_TOKEN, INPUT_GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
+  const { INPUT_GITHUB_TOKEN, GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
 
   if (!INPUT_GITHUB_TOKEN || !GITHUB_EVENT_PATH || !INPUT_OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
