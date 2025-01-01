@@ -104,7 +104,7 @@ Provide constructive feedback and highlight any issues, potential improvements, 
       owner,
       repo,
       issue_number: pullNumber, // Use `issue_number` for pull request comments
-      body: comments,
+      body: JSON.stringify(comments),
     });
   } catch (error) {
     console.error("Error during code review process:", error);
