@@ -1,4 +1,3 @@
-import { Octokit } from "@octokit/rest";
 import axios from "axios";
 
 (async () => {
@@ -12,12 +11,12 @@ import axios from "axios";
     process.exit(1);
   }
 
-  const event = require(GITHUB_EVENT_PATH);
-  const octokit = new Octokit({ auth: INPUT_GITHUB_TOKEN });
-
-  const owner = event.repository.owner.login;
-  const repo = event.repository.name;
-  const pullNumber = event.pull_request.number;
+  const { repository, number } = JSON.parse(
+    readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
+  );
+  const owner = repository.owner.login;
+  const repo = repository.name;
+  const pullNumber = number;
 
   try {
     // Get the pull request changes
