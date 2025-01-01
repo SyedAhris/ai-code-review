@@ -13,6 +13,8 @@ import { readFileSync } from "fs";
     process.exit(1);
   }
 
+  const octokit = new Octokit({ auth: GITHUB_TOKEN });
+
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
   );
@@ -20,31 +22,33 @@ import { readFileSync } from "fs";
   const repo = repository.name;
   const pullNumber = number;
 
-  try {
-    // Get the pull request changes
-    const { data: files } = await Octokit.pulls.listFiles({
-      owner,
-      repo,
-      pull_number: pullNumber,
-    });
 
-    // Construct the prompt
-    const changes = files
-      .map((file) => {
-        return `File: ${file.filename}\nChanges:\n${file.patch}`;
-      })
-      .join("\n\n");
+  console.log("Owner:", owner);
+  console.log("Repo:", repo);
+  console.log("Pull request number:", pullNumber);
+
+
+  const response = await octokit.pulls.get({
+    owner,
+    repo,
+    pullNumber,
+    mediaType: { format: "diff" },
+  });
+
+  console.log("Pull request diff:", response.data);
+
+  try {
 
     const prompt = `
 Review the following changes in the pull request:
 
-${changes}
+${response.data}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
     `;
 
     // Send the prompt to the Ollama server
-    const response = await axios.post(
+    const apiResponse = await axios.post(
       `${INPUT_OLLAMA_SERVER_URL}/api/generate`,
       { "prompt": prompt,
         "model":"llama3.1:8b",
@@ -53,7 +57,18 @@ Provide constructive feedback and highlight any issues, potential improvements, 
       { headers: { "Content-Type": "application/json" } }
     );
 
-    console.log("Review response:", response.data);
+    const comments = apiResponse.data;
+
+    console.log("Review response:", apiResponse.data);
+
+
+    await octokit.pulls.createReview({
+      owner,
+      repo,
+      pullNumber,
+      comments,
+      event: "COMMENT",
+    });
   } catch (error) {
     console.error("Error during code review process:", error);
     process.exit(1);
