@@ -96,7 +96,7 @@ Provide constructive feedback and highlight any issues, potential improvements, 
       { headers: { "Content-Type": "application/json" } }
     );
 
-    const comments = apiResponse.data;
+    const comments = apiResponse.data.response;
 
     // console.log("Review response:", apiResponse.data);
 
