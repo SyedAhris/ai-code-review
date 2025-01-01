@@ -44,16 +44,19 @@ import parseDiff from "parse-diff";
   const pullRequest = response.data;
   const base = pullRequest.base.sha;
   const head = pullRequest.head.sha;
+  console.log("Base SHA:", base);
+  console.log("Head SHA:", head);
+
 
   // Compare commits between base and head
-  const { data: diff } = await octokit.repos.compareCommits({
+  const compareResponse = await octokit.repos.compareCommits({
     owner,
     repo,
     base,
     head,
   });
 
-  console.log("Diff details:", diff);
+  console.log("Diff details:", compareResponse);
   
   
   const parsedDiff = parseDiff(response.data);
@@ -65,7 +68,7 @@ import parseDiff from "parse-diff";
     const prompt = `
 Review the following changes in the pull request:
 
-${filteredDiff}
+${parsedDiff}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
     `;
