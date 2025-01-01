@@ -32,12 +32,12 @@ import parseDiff from "parse-diff";
   const response = await octokit.pulls.get({
     owner,
     repo,
-    pullNumber
+    pull_number: pullNumber
   });
 
   console.log("Pull Request Raw Response Start ----------------------------------------------------------------------------");
 
-  console.log(response);
+  console.log(response.data);
 
   console.log("Pull Request Raw Response End ----------------------------------------------------------------------------");
 
