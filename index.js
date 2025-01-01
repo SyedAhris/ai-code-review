@@ -1,6 +1,8 @@
+import * as core from "@actions/core";
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { readFileSync } from "fs";
+import minimatch from "minimatch";
 import parseDiff from "parse-diff";
 
 (async () => {
