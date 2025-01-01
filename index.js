@@ -13,7 +13,7 @@ import { readFileSync } from "fs";
     process.exit(1);
   }
 
-  const octokit = new Octokit({ auth: GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: INPUT_GITHUB_TOKEN });
 
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
