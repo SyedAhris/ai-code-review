@@ -33,9 +33,16 @@ import parseDiff from "parse-diff";
     owner,
     repo,
     pullNumber,
-    mediaType: { format: "diff" },
+    mediaType: { format: "application/vnd.github.diff" },
   });
 
+  console.log("Pull Request Raw Response Start ----------------------------------------------------------------------------");
+
+  console.log(response);
+
+  console.log("Pull Request Raw Response End ----------------------------------------------------------------------------");
+  
+  
   const parsedDiff = parseDiff(response.data);
 
   console.log("Pull request diff:", parsedDiff);
