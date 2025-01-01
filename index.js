@@ -5,16 +5,16 @@ import axios from "axios";
   const { INPUT_GITHUB_TOKEN, INPUT_GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
   console.log(process.env)
 
-  if (!GITHUB_TOKEN || !GITHUB_EVENT_PATH || !OLLAMA_SERVER_URL) {
+  if (!INPUT_GITHUB_TOKEN || !INPUT_GITHUB_EVENT_PATH || !INPUT_OLLAMA_SERVER_URL) {
     console.error("Required environment variables are missing.");
-    console.log("GITHUB_TOKEN:", GITHUB_TOKEN);
+    console.log("GITHUB_TOKEN:", INPUT_GITHUB_TOKEN);
     console.log("GITHUB_EVENT_PATH:", GITHUB_EVENT_PATH);
     console.log("OLLAMA_SERVER_URL:", OLLAMA_SERVER_URL);
     process.exit(1);
   }
 
-  const event = require(GITHUB_EVENT_PATH);
-  const octokit = new Octokit({ auth: GITHUB_TOKEN });
+  const event = require(INPUT_GITHUB_EVENT_PATH);
+  const octokit = new Octokit({ auth: INPUT_GITHUB_TOKEN });
 
   const owner = event.repository.owner.login;
   const repo = event.repository.name;
@@ -45,7 +45,7 @@ Provide constructive feedback and highlight any issues, potential improvements, 
 
     // Send the prompt to the Ollama server
     const response = await axios.post(
-      `${OLLAMA_SERVER_URL}/api/generate`,
+      `${INPUT_OLLAMA_SERVER_URL}/api/generate`,
       { "prompt": prompt,
         "model":"llama3.1:8b",
         "stream": false
