@@ -1,6 +1,7 @@
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { readFileSync } from "fs";
+import parseDiff from "parse-diff";
 
 (async () => {
   const { INPUT_GITHUB_TOKEN, GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
@@ -35,14 +36,27 @@ import { readFileSync } from "fs";
     mediaType: { format: "diff" },
   });
 
-  console.log("Pull request diff:", response.data);
+  const parsedDiff = parseDiff(response.data);
+
+  const excludePatterns = core
+    .getInput("exclude")
+    .split(",")
+    .map((s) => s.trim());
+
+  const filteredDiff = parsedDiff.filter((file) => {
+    return !excludePatterns.some((pattern) =>
+      minimatch(file.to ?? "", pattern)
+    );
+  });
+
+  console.log("Pull request diff:", filteredDiff);
 
   try {
 
     const prompt = `
 Review the following changes in the pull request:
 
-${response.data}
+${filteredDiff}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
     `;
