@@ -1,7 +1,6 @@
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { readFileSync } from "fs";
-import parseDiff from "parse-diff";
 
 (async () => {
   const { INPUT_GITHUB_TOKEN, GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
@@ -56,19 +55,28 @@ import parseDiff from "parse-diff";
     head,
   });
 
-  console.log("Diff details:", compareResponse);
-  
-  
-  const parsedDiff = parseDiff(response.data);
+  const diffUrl = compareResponse.data.diff_url;
 
-  console.log("Pull request diff:", parsedDiff);
+  const diffResponse = await axios.get(diffUrl, {
+    headers: {
+      Accept: "application/vnd.github.v3.diff", // Specify diff format
+    },
+  });
+
+  // The raw diff as a string
+  const diffString = diffResponse.data;
+
+  console.log("Raw Diff:");
+  console.log(diffString);
+
+  console.log("Pull request diff:", diffString);
 
   try {
 
     const prompt = `
 Review the following changes in the pull request:
 
-${parsedDiff}
+${diffString}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
     `;
