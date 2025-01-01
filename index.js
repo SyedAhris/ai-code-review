@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { readFileSync } from "fs";
 (async () => {
   const { INPUT_GITHUB_TOKEN, GITHUB_EVENT_PATH, INPUT_OLLAMA_SERVER_URL } = process.env;
 
