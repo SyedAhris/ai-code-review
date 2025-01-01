@@ -1,8 +1,6 @@
-import * as core from "@actions/core";
 import { Octokit } from "@octokit/rest";
 import axios from "axios";
 import { readFileSync } from "fs";
-import minimatch from "minimatch";
 import parseDiff from "parse-diff";
 
 (async () => {
@@ -40,18 +38,7 @@ import parseDiff from "parse-diff";
 
   const parsedDiff = parseDiff(response.data);
 
-  const excludePatterns = core
-    .getInput("exclude")
-    .split(",")
-    .map((s) => s.trim());
-
-  const filteredDiff = parsedDiff.filter((file) => {
-    return !excludePatterns.some((pattern) =>
-      minimatch(file.to ?? "", pattern)
-    );
-  });
-
-  console.log("Pull request diff:", filteredDiff);
+  console.log("Pull request diff:", parsedDiff);
 
   try {
 
