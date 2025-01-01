@@ -84,6 +84,8 @@ Review the following changes in the pull request:
 ${diff}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
+
+Give response in markdown format
     `;
 
     // Send the prompt to the Ollama server
