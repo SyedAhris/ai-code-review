@@ -27,56 +27,61 @@ import { readFileSync } from "fs";
   console.log("Repo:", repo);
   console.log("Pull request number:", pullNumber);
 
+  const diff = getDiffString(owner, repo, pullNumber, octokit);
 
-  const response = await octokit.pulls.get({
-    owner,
-    repo,
-    pull_number: pullNumber
-  });
-
-  console.log("Pull Request Raw Response Start ----------------------------------------------------------------------------");
-
-  console.log(response.data);
-
-  console.log("Pull Request Raw Response End ----------------------------------------------------------------------------");
-
-  const pullRequest = response.data;
-  const base = pullRequest.base.sha;
-  const head = pullRequest.head.sha;
-  console.log("Base SHA:", base);
-  console.log("Head SHA:", head);
+  console.log("Diff:------------------>", diff);
 
 
-  // Compare commits between base and head
-  const compareResponse = await octokit.repos.compareCommits({
-    owner,
-    repo,
-    base,
-    head,
-  });
+  // const response = await octokit.pulls.get({
+  //   owner,
+  //   repo,
+  //   pull_number: pullNumber,
+  //   mediaType: { format: "diff" },
+  // });
 
-  const diffUrl = compareResponse.data.diff_url;
+  // console.log("Pull Request Raw Response Start ----------------------------------------------------------------------------");
 
-  const diffResponse = await axios.get(diffUrl, {
-    headers: {
-      Accept: "application/vnd.github.v3.diff", // Specify diff format
-    },
-  });
+  // console.log(response.data);
 
-  // The raw diff as a string
-  const diffString = diffResponse.data;
+  // console.log("Pull Request Raw Response End ----------------------------------------------------------------------------");
 
-  console.log("Raw Diff:");
-  console.log(diffString);
+  // const pullRequest = response.data;
+  // const base = pullRequest.base.sha;
+  // const head = pullRequest.head.sha;
+  // console.log("Base SHA:", base);
+  // console.log("Head SHA:", head);
 
-  console.log("Pull request diff:", diffString);
+
+  // // Compare commits between base and head
+  // const compareResponse = await octokit.repos.compareCommits({
+  //   owner,
+  //   repo,
+  //   base,
+  //   head,
+  // });
+
+  // const diffUrl = compareResponse.data.diff_url;
+
+  // const diffResponse = await axios.get(diffUrl, {
+  //   headers: {
+  //     Accept: "application/vnd.github.v3.diff", // Specify diff format
+  //   },
+  // });
+
+  // // The raw diff as a string
+  // const diffString = diffResponse.data;
+
+  // console.log("Raw Diff:");
+  // console.log(diffString);
+
+  // console.log("Pull request diff:", diffString);
 
   try {
 
     const prompt = `
 Review the following changes in the pull request:
 
-${diffString}
+${diff}
 
 Provide constructive feedback and highlight any issues, potential improvements, or best practices that can be applied.
     `;
@@ -108,3 +113,29 @@ Provide constructive feedback and highlight any issues, potential improvements, 
     process.exit(1);
   }
 })();
+
+
+async function getDiffString(owner, repo, pullNumber, octokit) {
+  try {
+
+    const response = await octokit.request(
+      "GET /repos/{owner}/{repo}/pulls/{pull_number}",
+      {
+        owner,
+        repo,
+        pull_number: pullNumber,
+        headers: {
+          Accept: "application/vnd.github.v3.diff", // Request diff format
+        },
+      }
+    );
+
+    const diffString = response.data; // The raw diff string
+    console.log("Raw Diff String:");
+    console.log(diffString);
+
+    return diffString;
+  } catch (error) {
+    console.error("Error fetching diff string:", error.message);
+  }
+}
