@@ -27,7 +27,7 @@ import { readFileSync } from "fs";
   console.log("Repo:", repo);
   console.log("Pull request number:", pullNumber);
 
-  const diff = getDiffString(owner, repo, pullNumber, octokit);
+  const diff = await getDiffString(owner, repo, pullNumber, octokit);
 
   console.log("Diff:------------------>", diff);
 
@@ -101,13 +101,13 @@ Provide constructive feedback and highlight any issues, potential improvements, 
     console.log("Review response:", apiResponse.data);
 
 
-    await octokit.pulls.createReview({
-      owner,
-      repo,
-      pullNumber,
-      comments,
-      event: "COMMENT",
-    });
+    // await octokit.pulls.createReview({
+    //   owner,
+    //   repo,
+    //   pullNumber,
+    //   comments,
+    //   event: "COMMENT",
+    // });
   } catch (error) {
     console.error("Error during code review process:", error);
     process.exit(1);
