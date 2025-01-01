@@ -16,7 +16,7 @@ import { readFileSync } from "fs";
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
   );
-  const owner = repository.owner.login,
+  const owner = repository.owner.login;
   const repo = repository.name;
   const pullNumber = number;
 
